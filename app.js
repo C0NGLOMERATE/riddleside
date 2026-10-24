@@ -105,7 +105,8 @@ function tone(freqs, dur = 0.15, vol = 0.07) {
   g.connect(c.destination);
   freqs.forEach(f => { const o = c.createOscillator(); o.frequency.value = f; o.connect(g); o.start(); o.stop(c.currentTime + dur); });
 }
-const RTRACKS = ['r_neon_rust', 'r_demo', 'r_riddleside', 'music'];
+const RTRACKS = ['r_neon_rust', 'r_demo', 'r_riddleside'];
+const theme = new Audio('assets/snd/music.mp3'); theme.loop = true; theme.preload = 'none';
 let rIdx = 0, radioTrackChanged = null;
 const music = new Audio(); music.preload = 'none'; music.src = `assets/snd/${RTRACKS[0]}.mp3`;
 music.addEventListener('ended', () => { rIdx = (rIdx + 1) % RTRACKS.length; music.src = `assets/snd/${RTRACKS[rIdx]}.mp3`; radioApply(); radioTrackChanged && radioTrackChanged(); });
@@ -822,17 +823,18 @@ function answer() {
 
 /* ---------------- RADIO ---------------- */
 const R = { on: false, f: 88.3, vol: 0.5 };
-const FREQS = [88.3, 96.1, 103.7];
+const FREQS = [88.3, 92.4, 96.1, 103.7];
 const stationAt = f => FREQS.findIndex(x => Math.abs(f - x) < 0.5);
 let tickerT = null, whisperT = null;
 function radioApply() {
-  const st = stationAt(R.f), off = S.muted || !R.on || sess.intro || sess.extMusic;
-  const duck = PH.state !== 'idle' ? 0.12 : 1;
+  const st = stationAt(R.f), off = S.muted || !R.on || sess.intro || sess.extMusic || PH.state !== 'idle';
+  const duck = 1; const onCall = PH.state !== 'idle';
   const play = (el, on, vol) => { if (on) { el.volume = Math.max(0, Math.min(1, vol)); if (el.paused) { el.preload = 'auto'; const p = el.play(); if (p && p.catch) p.catch(() => { }); } } else if (!el.paused) el.pause(); };
-  play(music, !off && st === 0, R.vol * duck);
-  play(bed, !off && st === 1, R.vol * duck * 0.55);
-  play(wloop, !off && st === 2 && sess.obs, R.vol * duck * 0.8);
-  let sv = 0; if (!off) sv = st === -1 ? 0.07 : st === 2 ? (sess.obs ? 0.02 : 0.06) : 0;
+  play(theme, !off && st === 0, R.vol * duck);
+  play(music, !off && st === 1, R.vol * duck);
+  play(bed, !off && st === 2, R.vol * duck * 0.55);
+  play(wloop, !off && st === 3 && sess.obs, R.vol * duck * 0.8);
+  let sv = 0; if (!off) sv = st === -1 ? 0.07 : st === 3 ? (sess.obs ? 0.02 : 0.06) : 0;
   if (AC || sv) staticLevel(sv * R.vol * duck * 2);
 }
 BUILD.radio = body => {
@@ -860,9 +862,10 @@ BUILD.radio = body => {
     if (st !== lastSt || force) {
       lastSt = st; clearInterval(tickerT); clearInterval(whisperT); radioTrackChanged = null; ticker.classList.remove('whisper');
       if (!R.on) { ticker.textContent = '—'; return; }
-      if (st === 0) { const showT = () => { ticker.textContent = r.stations[0].now + ' ' + r.tracks[rIdx]; }; showT(); radioTrackChanged = showT; }
-      else if (st === 1) { const show = () => { ticker.textContent = r.news[newsI++ % r.news.length]; }; show(); tickerT = setInterval(show, 7000); }
-      else if (st === 2 && sess.obs) {
+      if (st === 0) ticker.textContent = r.stations[0].now;
+      else if (st === 1) { const showT = () => { ticker.textContent = r.stations[1].now + ' ' + r.tracks[rIdx]; }; showT(); radioTrackChanged = showT; }
+      else if (st === 2) { const show = () => { ticker.textContent = r.news[newsI++ % r.news.length]; }; show(); tickerT = setInterval(show, 7000); }
+      else if (st === 3 && sess.obs) {
         ticker.classList.add('whisper'); heardSince = Date.now();
         const w = () => { ticker.textContent = rnd(r.whisper); noiseBurst(.3, .05); if (Date.now() - heardSince > 2500) ach('whisper'); };
         w(); whisperT = setInterval(w, 2600);
@@ -1000,7 +1003,8 @@ function winMusic() {
   };
   ['ya', 'sp'].forEach(t => tabs.append(h('button', { class: 'w98btn', 'data-t': t, onclick: () => { click(); show(t); } }, t === 'ya' ? P.ya : P.sp)));
   const links = h('div', { class: 'mlinks' }, h('a', { href: D.links.playlist, target: '_blank', rel: 'noopener' }, P.ya + ' · ' + P.open), h('a', { href: D.links.spotify, target: '_blank', rel: 'noopener' }, P.sp + ' · ' + P.open));
-  const w = openWin(P.title, h('div', { class: 'music' }, h('p', { class: 's' }, P.sub), tabs, frameBox, h('p', { class: 'fb' }, P.fallback), links)); if (!w) return;
+  const banner = h('div', { class: 'mbanner' }, h('img', { src: 'assets/img/loc_forest.webp', alt: '' }), h('div', {}, h('b', {}, 'RIDDLESIDE'), h('span', {}, P.banner)));
+  const w = openWin(P.title, h('div', { class: 'music' }, banner, h('p', { class: 's' }, P.sub), tabs, frameBox, h('p', { class: 'fb' }, P.fallback), links)); if (!w) return;
   show(tab);
   sess.extMusic = true; radioApply();
   clearTimeout(sess.musicT); sess.musicT = setTimeout(() => { if (w.isConnected) ach('music'); }, 30000);
@@ -1241,7 +1245,7 @@ function boot() {
     if (cur && cur.os) { const w = $('.win', cur.os); if (w) { w.remove(); return; } }
     if (cur) closeOv();
   });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) { [music, bed, wloop].forEach(a => a.pause()); if (AC) staticLevel(0); } else radioApply(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { [theme, music, bed, wloop].forEach(a => a.pause()); if (AC) staticLevel(0); } else radioApply(); });
   setInterval(() => { if (sess.obs && !cur && !sess.intro && Math.random() < 0.35) { flicker(); noiseBurst(.35, .03); if (Math.random() < 0.35) snd(Math.random() < .5 ? 'whisper1' : 'whisper2', 0.22); } }, 9000);
 }
 boot();

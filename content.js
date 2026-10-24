@@ -7,7 +7,7 @@ window.RS_DATA = {
     android: "https://play.google.com/store/apps/details?id=com.Novella.Lagerta&pcampaignid=web_share",
     tg: "https://t.me/o_obnova",
     playlist: "https://music.yandex.ru/playlists/2a23494d-1fb9-ad7d-be96-5ab066d6c45e",
-    yandexEmbed: "https://music.yandex.ru/iframe/playlist/2a23494d-1fb9-ad7d-be96-5ab066d6c45e",
+    yandexEmbed: "https://music.yandex.ru/iframe/playlist/anahadarovitch/1012",
     spotify: "https://open.spotify.com/playlist/7lqxAsnDyHr0HPuBBHi9AD",
     spotifyEmbed: "https://open.spotify.com/embed/playlist/7lqxAsnDyHr0HPuBBHi9AD?utm_source=generator&theme=0",
     insta: "https://www.instagram.com/tyler_diiva",
@@ -252,11 +252,12 @@ ru: {
     vol: "Громкость",
     playlist: "Плейлисты «Риддлсайда» — на компьютере Роуз",
     stations: [
-      { f: "88.3", name: "KRDL · Музыка тумана", now: "В эфире:" },
+      { f: "88.3", name: "KRDL · Музыка тумана", now: "В эфире: главная тема «Риддлсайда»" },
+      { f: "92.4", name: "KRDL · Ночной эфир", now: "В эфире:" },
       { f: "96.1", name: "Радио Риддлсайда", now: "Новости и погода" },
       { f: "103.7", name: "—", now: "Помехи" }
     ],
-    tracks: ["Neon Rust", "Demo", "Riddleside", "Главная тема"],
+    tracks: ["Neon Rust", "Demo", "Riddleside"],
     news: [
       "Прогноз погоды: туман утром, туман днём, к вечеру туман с прояснениями. Прояснений не ожидается.",
       "Городской совет напоминает: тыквы на крыльце не должны перекрывать проход пожарным. Да, мистер Гаррисон, это про вас.",
@@ -290,7 +291,7 @@ ru: {
     owner: "Управление шерифа округа Риддлсайд",
     start: "Пуск", shutdown: "Выключить", user: "пом. шерифа Р. Линч",
     icons: { forum: "Риддл-Онлайн", fine: "Штраф.exe", ledger: "Ведомость", secret: "ЛИЧНОЕ", trash: "Корзина", about: "О проекте.txt", music: "Музыка", mines: "Сапёр" },
-    music: { title: "Музыка", sub: "Плейлисты «Риддлсайда». Включи и листай кабинет дальше.", ya: "Яндекс Музыка", sp: "Spotify", open: "Открыть в приложении →", fallback: "Плеер не загрузился? Открой плейлист по ссылке ниже. Полные треки доступны после входа в аккаунт сервиса." },
+    music: { title: "Музыка", banner: "Официальный плейлист к новелле · музыка тумана", sub: "Плейлисты «Риддлсайда». Включи и листай кабинет дальше.", ya: "Яндекс Музыка", sp: "Spotify", open: "Открыть в приложении →", fallback: "Плеер не загрузился? Открой плейлист по ссылке ниже. Полные треки доступны после входа в аккаунт сервиса." },
     mines: { title: "Сапёр", flag: "Флажок", win: "Чисто. Все мины найдены.", lose: "Бум. Отчёт о происшествии заполнять будешь сама.", hint: "ПКМ или режим «Флажок» — поставить флажок" },
     pwTitle: "Папка защищена паролем", pw: "Пароль:", pwHint: "Подсказка: потолок", pwBad: "Неверный пароль.", ok: "OK", cancel: "Отмена",
     secretFiles: [
@@ -704,11 +705,12 @@ en: {
     vol: "Volume",
     playlist: "Riddleside playlists are on Rose's computer",
     stations: [
-      { f: "88.3", name: "KRDL · Music in the Fog", now: "On air:" },
+      { f: "88.3", name: "KRDL · Music in the Fog", now: "On air: the Riddleside main theme" },
+      { f: "92.4", name: "KRDL · Night Air", now: "On air:" },
       { f: "96.1", name: "Riddleside Public Radio", now: "News and weather" },
       { f: "103.7", name: "—", now: "Static" }
     ],
-    tracks: ["Neon Rust", "Demo", "Riddleside", "Main theme"],
+    tracks: ["Neon Rust", "Demo", "Riddleside"],
     news: [
       "Weather: fog in the morning, fog in the afternoon, fog with clearing by evening. No clearing expected.",
       "The town council reminds residents that porch pumpkins must not block access for firefighters. Yes, Mr. Garrison, we mean you.",
@@ -742,7 +744,7 @@ en: {
     owner: "Riddleside County Sheriff's Office",
     start: "Start", shutdown: "Shut down", user: "Dep. R. Lynch",
     icons: { forum: "RiddleTalk", fine: "Citation.exe", ledger: "Record", secret: "PRIVATE", trash: "Recycle Bin", about: "About.txt", music: "Music", mines: "Minesweeper" },
-    music: { title: "Music", sub: "The Riddleside playlists. Press play and keep exploring the office.", ya: "Yandex Music", sp: "Spotify", open: "Open in the app →", fallback: "Player didn't load? Open the playlist with the link below. Full tracks play when you're signed in to the service." },
+    music: { title: "Music", banner: "The official playlist for the novel · music in the fog", sub: "The Riddleside playlists. Press play and keep exploring the office.", ya: "Yandex Music", sp: "Spotify", open: "Open in the app →", fallback: "Player didn't load? Open the playlist with the link below. Full tracks play when you're signed in to the service." },
     mines: { title: "Minesweeper", flag: "Flag", win: "All clear. Every mine found.", lose: "Boom. You're filing that incident report yourself.", hint: "Right-click or Flag mode to place a flag" },
     pwTitle: "This folder is password protected", pw: "Password:", pwHint: "Hint: the ceiling", pwBad: "Wrong password.", ok: "OK", cancel: "Cancel",
     secretFiles: [
