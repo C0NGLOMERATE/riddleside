@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Риддлсайд</title>
+<meta name="description" content="Риддлсайд: визуальная новелла в жанре неонуар и психологического хоррора. Загляни в кабинет помощницы шерифа Роуз Линч.">
+<meta name="theme-color" content="#0d0b0a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Риддлсайд · Riddleside">
+<meta property="og:description" content="В городе, где туман скрывает следы преступлений, грань между реальностью и безумием стирается.">
+<meta property="og:image" content="https://c0nglomerate.github.io/riddleside/og.jpg">
+<meta property="og:url" content="https://c0nglomerate.github.io/riddleside/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=PT+Mono&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Caveat:wght@500;700&family=Marck+Script&family=Amatic+SC:wght@700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="logo" id="logo"><b id="logoT">Риддлсайд</b><small id="logoS"></small></button>
+  <nav class="nav" id="nav" aria-label="Разделы"></nav>
+  <div class="tools">
+    <button class="btn-play" id="playBtn">Играть</button>
+    <button class="btn-ico btn-lang" id="langBtn">EN</button>
+    <button class="btn-ico" id="soundBtn"></button>
+    <button class="btn-ico burger" id="burger"></button>
+  </div>
+</header>
+<main class="stage" id="stage">
+  <div class="backdrop"></div>
+  <div class="scroller" id="scroller"><div class="scene" id="scene"></div></div>
+  <button class="path-badge" id="pathBadge"></button>
+  <div class="hint" id="hint"></div>
+</main>
+<div id="overlays"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="achs" id="achs" aria-live="polite"></div>
+<div class="intro" id="intro"></div>
+<noscript><p style="padding:80px 20px;text-align:center;color:#cfc8bd">Включите JavaScript, чтобы войти в Риддлсайд. · Please enable JavaScript to enter Riddleside.</p></noscript>
+
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
