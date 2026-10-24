@@ -7,11 +7,14 @@ window.RS_DATA = {
     android: "https://play.google.com/store/apps/details?id=com.Novella.Lagerta&pcampaignid=web_share",
     tg: "https://t.me/o_obnova",
     playlist: "https://music.yandex.ru/playlists/2a23494d-1fb9-ad7d-be96-5ab066d6c45e",
+    yandexEmbed: "https://music.yandex.ru/iframe/playlist/2a23494d-1fb9-ad7d-be96-5ab066d6c45e",
+    spotify: "https://open.spotify.com/playlist/7lqxAsnDyHr0HPuBBHi9AD",
+    spotifyEmbed: "https://open.spotify.com/embed/playlist/7lqxAsnDyHr0HPuBBHi9AD?utm_source=generator&theme=0",
     insta: "https://www.instagram.com/tyler_diiva",
     site: "c0nglomerate.github.io/riddleside"
   },
   /* День релиза в октябре 2026 (число), чтобы обвести его на календаре. null = не обводить */
-  releaseDay: null,
+  releaseDay: 27,
   numbers: { tyler: "0142", mom: "0163", diner: "0188", nate: "0131", creepy: "0117", sheriff: "101", e911: "911" }
 };
 
@@ -52,7 +55,7 @@ ru: {
       folder: "Папка из архива", phone: "Телефон", mug: "Кофе. Холодный.", lamp: "Лава-лампа",
       monitor: "Компьютер", map: "Карта Риддлсайда", wanted: "Ориентировка", radio: "Радиоприёмник",
       walkie: "Рация", calendar: "Календарь", diploma: "Диплом", frames: "Грамоты", shelf: "Личные дела",
-      pens: "Ручки", st1: "Стикер", st2: "Стикер", drawerL: "Ящик стола", drawerR: "Ящик стола", flag: "Флаг"
+      pens: "Ручки", st1: "Стикер", st2: "Стикер", drawerL: "Ящик стола", drawerR: "Ящик стола", flag: "Флаг", cigs: "Сигареты", note: "Записка", clip: "Вырезка из газеты"
     }
   },
 
@@ -78,7 +81,12 @@ ru: {
     st2: "НЕ ЗАБЫТЬ:\nсигареты\nмолоко\nпозвонить маме (нет)",
     st2Obs: "17",
     torn: "Сорвала. Легче не стало.",
-    monitorObs: "ты слышишь?"
+    monitorObs: "ты слышишь?",
+    cigs: ["В кабинете не курят. Маршалл чует дым через две стены.", "Нет. Потерпи до перекура.", "Линч, ты же обещала себе. Ну, почти обещала.", "Ладно, одну. Нет. Нет.", "Пятая попытка. Записываю в ведомость."],
+    wanted: ["РАЗЫСКИВАЮТСЯ", "Братья Доусон", "кража садовых гномов (40 шт.)", "Награда: $50"],
+    card: "Пт, 21:00 · Кэрри\nНЕ ОПАЗДЫВАТЬ", clipHead: "RIDDLESIDE COURIER", clipTitle: "Туман на 112-м: трое в кювете за неделю",
+    clipNote: "«Туман на 112-м». Трое в кювете за неделю, все трезвые. Двое говорят, что объезжали человека на обочине. Человека никто не нашёл.",
+    cardNote: "Пятница, 21:00, Кэрри. «Не опаздывать» подчёркнуто три раза. Кэрри знает меня слишком хорошо."
   },
 
   people: [
@@ -133,7 +141,7 @@ ru: {
     obsLabel: "на полях, другим почерком:",
     labels: { forest: "ЛЕС", river: "р. Тихая", hwy: "SR-112", center: "ЦЕНТР", north: "Сев. дорога", mill: "старая лесопилка", strait: "к Порт-Анджелесу", mountains: "горы Олимпик", elm: "ул. Эльм", main: "Мейн-стрит" },
     places: [
-      { id: "diner", name: "Закусочная Пирса", sub: "Pierce Diner · шоссе на въезде в город, 24/7",
+      { id: "diner", name: "Закусочная Пирса", sub: "Pierce's Diner · шоссе на въезде в город, 24/7",
         text: "Единственное место в городе, где кофе наливают круглосуточно и без лишних вопросов. Ну, почти без вопросов: если за стойкой Кэрри, вопросы будут. Неоновая вывеска мигает с тех пор, как я училась в школе. Тайлер называет это атмосферой.",
         obs: "Иногда радио здесь начинает трещать само по себе." },
       { id: "sheriff", name: "Управление шерифа округа Риддлсайд", sub: "центр",
@@ -233,7 +241,7 @@ ru: {
         tyler: ["Ты чего не пишешь? А, у тебя рабочий. Окей. Проверял, жива ли ты. Жива. Отбой."],
         diner: ["Роуз, это Кэрри! Просто напоминаю: кофе и сигареты — это не обед. Всё, пока!"],
         mom: ["Роззи! Ой, я не туда звонила. Или туда? Ладно, раз уж ты взяла… Ты ключи мои не видела?"],
-        creepy: ["{note}Тишина. Кто-то дышит.", "…ты слышишь?", "{hang}"]
+        creepy: ["{note}Тишина. Кто-то дышит.", "…я тебя вижу…", "{hang}"]
       }
     }
   },
@@ -242,12 +250,13 @@ ru: {
     title: "Радиоприёмник",
     tune: "Крути ручку",
     vol: "Громкость",
-    playlist: "Плейлист «Риддлсайда» в Яндекс Музыке",
+    playlist: "Плейлисты «Риддлсайда» — на компьютере Роуз",
     stations: [
-      { f: "88.3", name: "KRDL · Музыка тумана", now: "В эфире: главная тема «Риддлсайда»" },
+      { f: "88.3", name: "KRDL · Музыка тумана", now: "В эфире:" },
       { f: "96.1", name: "Радио Риддлсайда", now: "Новости и погода" },
       { f: "103.7", name: "—", now: "Помехи" }
     ],
+    tracks: ["Neon Rust", "Demo", "Riddleside", "Главная тема"],
     news: [
       "Прогноз погоды: туман утром, туман днём, к вечеру туман с прояснениями. Прояснений не ожидается.",
       "Городской совет напоминает: тыквы на крыльце не должны перекрывать проход пожарным. Да, мистер Гаррисон, это про вас.",
@@ -280,7 +289,9 @@ ru: {
     os: "CountyOS 98",
     owner: "Управление шерифа округа Риддлсайд",
     start: "Пуск", shutdown: "Выключить", user: "пом. шерифа Р. Линч",
-    icons: { forum: "Риддл-Онлайн", fine: "Штраф.exe", ledger: "Ведомость", secret: "ЛИЧНОЕ", trash: "Корзина", about: "О проекте.txt" },
+    icons: { forum: "Риддл-Онлайн", fine: "Штраф.exe", ledger: "Ведомость", secret: "ЛИЧНОЕ", trash: "Корзина", about: "О проекте.txt", music: "Музыка", mines: "Сапёр" },
+    music: { title: "Музыка", sub: "Плейлисты «Риддлсайда». Включи и листай кабинет дальше.", ya: "Яндекс Музыка", sp: "Spotify", open: "Открыть в приложении →", fallback: "Плеер не загрузился? Открой плейлист по ссылке ниже. Полные треки доступны после входа в аккаунт сервиса." },
+    mines: { title: "Сапёр", flag: "Флажок", win: "Чисто. Все мины найдены.", lose: "Бум. Отчёт о происшествии заполнять будешь сама.", hint: "ПКМ или режим «Флажок» — поставить флажок" },
     pwTitle: "Папка защищена паролем", pw: "Пароль:", pwHint: "Подсказка: потолок", pwBad: "Неверный пароль.", ok: "OK", cancel: "Отмена",
     secretFiles: [
       { name: "сны.txt", text: "14.10 — Опять вода. Чёрная и тёплая. Я не тону, просто не могу всплыть.\n\n16.10 — Кто-то стоял у кровати и считал. Досчитал до семнадцати и замолчал. Утром на потолке всё так же семнадцать пятен. Совпадение.\n\n19.10 — Сон, где все в закусочной поворачиваются ко мне одновременно. Проснулась от собственного голоса.\n\n21.10 — Сегодня без снов. Не уверена, что это хорошо.\n\n22.10 — Если кто-то это читает: пароль надо сменить. И мне, видимо, тоже." },
@@ -303,7 +314,7 @@ ru: {
     boards: { city: "Городская жизнь", weird: "Странное", market: "Барахолка", food: "Кухня и рецепты", flood: "Флуд" },
     ranks: { mod: "Модератор", old: "Старожил", local: "Местный житель", new: "Новичок", law: "Закон", biz: "Бизнесмен" },
     users: {
-      mrs_garrison: { r: "old" }, RonTheRealist: { r: "local" }, DodgeDaddy666: { r: "biz", sig: "Pierce Diner 24/7 · Pierce Motel · заправка · да, это всё моё" },
+      mrs_garrison: { r: "old" }, RonTheRealist: { r: "local" }, DodgeDaddy666: { r: "biz", sig: "Pierce's Diner 24/7 · Pierce Motel · заправка · да, это всё моё" },
       Judy_Sparkle: { r: "local", sig: "я ничего не говорю, но я всё знаю ✨" }, "Шериф_Маршалл": { r: "law" },
       insomnia_kid: { r: "local" }, ryzhaya_salfetka: { r: "local", sig: "рисую на салфетках, вытираю ими слёзы" }, forest_dad: { r: "old" },
       big_E_motors: { r: "local", sig: "автомастерская. звоните. или не звоните, я всё равно в гараже" },
@@ -442,6 +453,8 @@ ru: {
       { id: "fine", s: "rep", t: "Честный коп", d: "Выписать штраф." },
       { id: "forum", s: "rep", t: "Форумный археолог", d: "Прочитать все темы на форуме." },
       { id: "napkin", s: "rep", t: "Салфеточный архив", d: "Найти рисунки Кэрри." },
+      { id: "mines", s: "rep", t: "Сапёр", d: "Выиграть в «Сапёра» на компьютере Роуз." },
+      { id: "music", s: "rep", t: "Меломан", d: "Послушать плейлист «Риддлсайда»." },
       { id: "lamp", s: "obs", t: "Не стоило", d: "Включить лава-лампу." },
       { id: "creepy", s: "obs", t: "Кто-то на линии", d: "Дозвониться по номеру, которого нет." },
       { id: "whisper", s: "obs", t: "Не та волна", d: "Услышать голос на 103.7." },
@@ -452,7 +465,8 @@ ru: {
       { id: "classified", s: "shame", t: "Тебе же сказали", d: "Пять раз ломиться в засекреченную серию." },
       { id: "stickers", s: "shame", t: "Нервный срыв", d: "Сорвать все стикеры." },
       { id: "wrong", s: "shame", t: "Не туда", d: "Набрать несуществующий номер." },
-      { id: "night", s: "shame", t: "Ночная смена", d: "Зайти на сайт между полуночью и пятью утра." }
+      { id: "night", s: "shame", t: "Ночная смена", d: "Зайти на сайт между полуночью и пятью утра." },
+      { id: "cigs", s: "shame", t: "Вредная привычка", d: "Пять раз потянуться к сигаретам в кабинете." }
     ]
   }
 },
@@ -493,7 +507,7 @@ en: {
       folder: "Archive folder", phone: "Phone", mug: "Coffee. Cold.", lamp: "Lava lamp",
       monitor: "Computer", map: "Map of Riddleside", wanted: "Wanted poster", radio: "Radio",
       walkie: "Police radio", calendar: "Calendar", diploma: "Diploma", frames: "Certificates", shelf: "Personnel files",
-      pens: "Pens", st1: "Sticky note", st2: "Sticky note", drawerL: "Desk drawer", drawerR: "Desk drawer", flag: "Flag"
+      pens: "Pens", st1: "Sticky note", st2: "Sticky note", drawerL: "Desk drawer", drawerR: "Desk drawer", flag: "Flag", cigs: "Cigarettes", note: "Note", clip: "Newspaper clipping"
     }
   },
 
@@ -519,7 +533,12 @@ en: {
     st2: "DON'T FORGET:\ncigarettes\nmilk\ncall mom (no)",
     st2Obs: "17",
     torn: "Tore it off. Didn't help.",
-    monitorObs: "can you hear it?"
+    monitorObs: "can you hear it?",
+    cigs: ["No smoking in the office. Marshall can smell it through two walls.", "No. Wait for your break.", "Lynch, you promised yourself. Well, almost.", "Fine, just one. No. No.", "Fifth try. That's going on the record."],
+    wanted: ["WANTED", "The Dawson brothers", "theft of garden gnomes (40)", "Reward: $50"],
+    card: "Fri, 9 PM · Carrie\nDON'T BE LATE", clipHead: "RIDDLESIDE COURIER", clipTitle: "Fog on Highway 112: three cars in the ditch this week",
+    clipNote: "“Fog on Highway 112.” Three cars in the ditch this week, all drivers sober. Two say they swerved to avoid someone on the shoulder. Nobody found anyone.",
+    cardNote: "Friday, 9 PM, Carrie. “Don't be late” underlined three times. Carrie knows me too well."
   },
 
   people: [
@@ -534,7 +553,7 @@ en: {
       noteLabel: "Note:", note: "Parks like the sidewalk was left to him in a will. Technically his parents did leave him half the town, so it's hard to argue. He's sat in our holding cell three times, and three times I came to get him, once in my pajamas. Every time he swears he didn't do anything. Technically that's even true: other people usually did it, while he stood next to them and commented. If he ever pays a single ticket, I'm opening a file on him for suspicious behavior.\nLaughs louder than anyone in the room. I've learned to tell when he actually finds something funny. It happens less often than you'd think.",
       cap: "Autograph. In a couple of years it'll be worth more than your car. — T. P." },
     { id: "carrie", name: "Carrie Thompson",
-      rows: [["Age", "30"], ["Occupation", "waitress, Pierce Diner"], ["Description", "short, red hair, freckles. Uniform always pressed, even at the end of a double shift."], ["Record", "none. Not one. Not even a jaywalking ticket. I checked, when I was bored."]],
+      rows: [["Age", "30"], ["Occupation", "waitress, Pierce's Diner"], ["Description", "short, red hair, freckles. Uniform always pressed, even at the end of a double shift."], ["Record", "none. Not one. Not even a jaywalking ticket. I checked, when I was bored."]],
       noteLabel: "Note:", note: "Knows who eats what, who divorced whom and whose blood pressure is acting up, and has never ratted anyone out. With an informant like that I'd close every cold case in the county. While she waits on orders from the kitchen she draws on napkins, then throws them away. I stole a couple. They're in my desk drawer. Don't tell her.\nTakes care of everyone aggressively. Try offering her help or money and you'll find out what wounded pride sounds like at full volume.",
       cap: "Stop by, I'll draw you on a napkin. Free if you tip :)" },
     { id: "ethan", name: "Ethan Sanders",
@@ -574,7 +593,7 @@ en: {
     obsLabel: "in the margin, in different handwriting:",
     labels: { forest: "FOREST", river: "Quiet River", hwy: "SR-112", center: "DOWNTOWN", north: "North Rd", mill: "old sawmill", strait: "to Port Angeles", mountains: "Olympic Mts", elm: "Elm St", main: "Main St" },
     places: [
-      { id: "diner", name: "Pierce Diner", sub: "highway at the town entrance, 24/7",
+      { id: "diner", name: "Pierce's Diner", sub: "highway at the town entrance, 24/7",
         text: "The only place in town that pours coffee around the clock with no questions asked. Well, almost no questions: if Carrie's behind the counter, there will be questions. The neon sign has been flickering since I was in high school. Tyler calls it atmosphere.",
         obs: "Sometimes the radio in here starts crackling on its own." },
       { id: "sheriff", name: "Riddleside County Sheriff's Office", sub: "downtown",
@@ -651,11 +670,11 @@ en: {
       ], holdEnd: "Hold music. She never came back.",
       night: ["Hello?! Rozzie?! What happened? Who died?!", "…Oh, just calling. Well, you scared me! Since we're both up, let's chat…"] },
       diner: { seq: [
-        ["Pierce Diner, how can I help! …Rose? Why are you calling, just come over, the coffee's fresh.", "Swamped at work again, huh? Don't forget to eat lunch, I know you! Coffee and cigarettes are not lunch. Just a reminder."],
-        ["Pierce Diner! …You again? By the way, you won't believe who came in. Mr. Everyone-Owes-Me himself: ordered black coffee and looked at it like someone poured dishwater in his mug.", "Didn't tip."],
+        ["Pierce's Diner, how can I help! …Rose? Why are you calling, just come over, the coffee's fresh.", "Swamped at work again, huh? Don't forget to eat lunch, I know you! Coffee and cigarettes are not lunch. Just a reminder."],
+        ["Pierce's Diner! …You again? By the way, you won't believe who came in. Mr. Everyone-Owes-Me himself: ordered black coffee and looked at it like someone poured dishwater in his mug.", "Didn't tip."],
         ["One second… No, sir, ketchup is not a free add-on! …Sorry. Mornings.", "We're meeting tonight, remember? Don't be late, or Tyler will start in on Ethan's mom again and I'll end up banging my head on the table."]
-      ], pool: [["Pierce Diner, we're slammed, call back… Oh, it's you? Still slammed, love you, bye!"]],
-      night: ["{as:other}Pierce Diner, good evening. Carrie? She's on in the morning, ma'am. Can I get you some pie?"], otherName: "Night shift" },
+      ], pool: [["Pierce's Diner, we're slammed, call back… Oh, it's you? Still slammed, love you, bye!"]],
+      night: ["{as:other}Pierce's Diner, good evening. Carrie? She's on in the morning, ma'am. Can I get you some pie?"], otherName: "Night shift" },
       e911: { seq: [
         ["911, what's your emergency?", "…Call from the sheriff's office line. Lynch, are you calling 911 *from the station*?", "I'm on the other side of the wall. I can hear you without the phone."],
         ["911. Lynch, if you're testing the line again: it works. So do I. Unlike some people."],
@@ -674,7 +693,7 @@ en: {
         tyler: ["Why aren't you texting back? Oh, you're at work. Okay. Just checking you're alive. You're alive. Over and out."],
         diner: ["Rose, it's Carrie! Just a reminder: coffee and cigarettes are not lunch. Okay, bye!"],
         mom: ["Rozzie! Oh, I called the wrong number. Or the right one? Well, since you picked up… Have you seen my keys?"],
-        creepy: ["{note}Silence. Someone is breathing.", "…can you hear it?", "{hang}"]
+        creepy: ["{note}Silence. Someone is breathing.", "…I see you…", "{hang}"]
       }
     }
   },
@@ -683,12 +702,13 @@ en: {
     title: "Radio",
     tune: "Turn the dial",
     vol: "Volume",
-    playlist: "Riddleside playlist on Yandex Music",
+    playlist: "Riddleside playlists are on Rose's computer",
     stations: [
-      { f: "88.3", name: "KRDL · Music in the Fog", now: "On air: the Riddleside main theme" },
+      { f: "88.3", name: "KRDL · Music in the Fog", now: "On air:" },
       { f: "96.1", name: "Riddleside Public Radio", now: "News and weather" },
       { f: "103.7", name: "—", now: "Static" }
     ],
+    tracks: ["Neon Rust", "Demo", "Riddleside", "Main theme"],
     news: [
       "Weather: fog in the morning, fog in the afternoon, fog with clearing by evening. No clearing expected.",
       "The town council reminds residents that porch pumpkins must not block access for firefighters. Yes, Mr. Garrison, we mean you.",
@@ -712,7 +732,7 @@ en: {
       [["cheryl", "Anyone seen anything suspicious by the forest?"], ["ron", "Just fog."], ["cheryl", "The fog is suspicious."], ["ron", "The fog is always here."]],
       [["d", "Deputy Lynch, please report to the sheriff."], ["d", "I repeat: report. Not call."]],
       [["ron", "Ten-seven, lunch."], ["cheryl", "Lunch at ten a.m., Ron?"], ["ron", "Second breakfast."]],
-      [["d", "Twelve, what's your ten-twenty?"], ["ron", "Pierce Diner."], ["d", "Again?"], ["ron", "It's a strategic location."]]
+      [["d", "Twelve, what's your ten-twenty?"], ["ron", "Pierce's Diner."], ["d", "Again?"], ["ron", "It's a strategic location."]]
     ],
     obs: [["x", "…twelve… are you seeing this? Someone's standing by the road…"], ["x", "…shhhh…"], ["ron", "No. Never mind. Over."]]
   },
@@ -721,7 +741,9 @@ en: {
     os: "CountyOS 98",
     owner: "Riddleside County Sheriff's Office",
     start: "Start", shutdown: "Shut down", user: "Dep. R. Lynch",
-    icons: { forum: "RiddleTalk", fine: "Citation.exe", ledger: "Record", secret: "PRIVATE", trash: "Recycle Bin", about: "About.txt" },
+    icons: { forum: "RiddleTalk", fine: "Citation.exe", ledger: "Record", secret: "PRIVATE", trash: "Recycle Bin", about: "About.txt", music: "Music", mines: "Minesweeper" },
+    music: { title: "Music", sub: "The Riddleside playlists. Press play and keep exploring the office.", ya: "Yandex Music", sp: "Spotify", open: "Open in the app →", fallback: "Player didn't load? Open the playlist with the link below. Full tracks play when you're signed in to the service." },
+    mines: { title: "Minesweeper", flag: "Flag", win: "All clear. Every mine found.", lose: "Boom. You're filing that incident report yourself.", hint: "Right-click or Flag mode to place a flag" },
     pwTitle: "This folder is password protected", pw: "Password:", pwHint: "Hint: the ceiling", pwBad: "Wrong password.", ok: "OK", cancel: "Cancel",
     secretFiles: [
       { name: "dreams.txt", text: "10/14 — Water again. Black and warm. I'm not drowning. I just can't come up.\n\n10/16 — Someone stood by the bed and counted. Got to seventeen and stopped. In the morning there were still seventeen stains on the ceiling. Coincidence.\n\n10/19 — The dream where everyone in the diner turns to look at me at the same time. Woke up to the sound of my own voice.\n\n10/21 — No dreams tonight. Not sure that's a good thing.\n\n10/22 — If anyone is reading this: the password needs changing. So do I, apparently." },
@@ -744,7 +766,7 @@ en: {
     boards: { city: "Town Life", weird: "The Weird Stuff", market: "Buy & Sell", food: "Kitchen & Recipes", flood: "Off-Topic" },
     ranks: { mod: "Moderator", old: "Old-timer", local: "Local", new: "Newbie", law: "The Law", biz: "Businessman" },
     users: {
-      mrs_garrison: { r: "old" }, RonTheRealist: { r: "local" }, DodgeDaddy666: { r: "biz", sig: "Pierce Diner 24/7 · Pierce Motel · gas station · yes, all mine" },
+      mrs_garrison: { r: "old" }, RonTheRealist: { r: "local" }, DodgeDaddy666: { r: "biz", sig: "Pierce's Diner 24/7 · Pierce Motel · gas station · yes, all mine" },
       Judy_Sparkle: { r: "local", sig: "i'm not saying anything, but i know everything ✨" }, Sheriff_Marshall: { r: "law" },
       insomnia_kid: { r: "local" }, ginger_napkin: { r: "local", sig: "i draw on napkins and cry into them" }, forest_dad: { r: "old" },
       big_E_motors: { r: "local", sig: "auto shop. call. or don't, i'm in the garage anyway" },
@@ -774,7 +796,7 @@ en: {
         ["big_E_motors", "the potholes on north road are so bad you probably just hit your head on the roof. come by, i'll look at your suspension"],
         ["Mod_Bill", "Pinned by popular request. Please don't drive out to the sawmill. There's no need to check. It's not a challenge."]
       ]},
-      { id: "pie", b: "food", t: "Cherry pie at Pierce Diner: sacred or overrated?", views: 2310, posts: [
+      { id: "pie", b: "food", t: "Cherry pie at Pierce's Diner: sacred or overrated?", views: 2310, posts: [
         ["foodie_frank", "Ready for war. The pie is fine, but six bucks a slice? In Port Angeles you get ice cream with it for that money."],
         ["ginger_napkin", "It's baked every morning at five. Hand-made crust. Local cherries from the Hodges farm. Ask for ice cream and you'll get it, nobody ever asks."],
         ["foodie_frank", "Do you work there or something?"],
@@ -883,6 +905,8 @@ en: {
       { id: "fine", s: "rep", t: "Honest Cop", d: "Write a ticket." },
       { id: "forum", s: "rep", t: "Forum Archaeologist", d: "Read every topic on the forum." },
       { id: "napkin", s: "rep", t: "Napkin Archive", d: "Find Carrie's drawings." },
+      { id: "mines", s: "rep", t: "Sweeper", d: "Win Minesweeper on Rose's computer." },
+      { id: "music", s: "rep", t: "Music Lover", d: "Listen to the Riddleside playlist." },
       { id: "lamp", s: "obs", t: "Shouldn't Have", d: "Turn on the lava lamp." },
       { id: "creepy", s: "obs", t: "Someone on the Line", d: "Get through to a number that doesn't exist." },
       { id: "whisper", s: "obs", t: "Wrong Frequency", d: "Hear the voice on 103.7." },
@@ -893,7 +917,8 @@ en: {
       { id: "classified", s: "shame", t: "You Were Told", d: "Try to open the classified episode five times." },
       { id: "stickers", s: "shame", t: "Nervous Breakdown", d: "Tear off every sticky note." },
       { id: "wrong", s: "shame", t: "Wrong Number", d: "Dial a number that doesn't exist." },
-      { id: "night", s: "shame", t: "Night Shift", d: "Visit the site between midnight and 5 a.m." }
+      { id: "night", s: "shame", t: "Night Shift", d: "Visit the site between midnight and 5 a.m." },
+      { id: "cigs", s: "shame", t: "Bad Habit", d: "Reach for the cigarettes in the office five times." }
     ]
   }
 }
