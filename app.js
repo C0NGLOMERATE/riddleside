@@ -256,7 +256,7 @@ function dotsTap() { if (isTouch && ++dotTaps >= 5) document.body.classList.remo
 /* scene actions */
 function cigsClick() {
   sess.cigs = (sess.cigs || 0) + 1;
-  note(L.scene.cigs[Math.min(sess.cigs - 1, L.scene.cigs.length - 1)]);
+  note(L.scene.cigs[(sess.cigs - 1) % L.scene.cigs.length]);
   click(); if (sess.cigs >= 5) ach('cigs');
 }
 function framesClick() { note(achCount() ? L.scene.framesSome : L.scene.frames); openOv('ledger'); }
@@ -449,10 +449,10 @@ BUILD.map = (body, opts) => {
   const pins = {};
   L.map.places.forEach((p, i) => {
     const [x, y] = MAPXY[p.id];
-    const b = h('button', { class: 'pin' + (S.seen.places.includes(p.id) ? ' seen' : ''), style: { left: x / 10 + '%', top: y / 7 + '%' }, 'aria-label': p.name, onclick: () => show(p.id) }, h('span', {}, h('i', {}, i + 1)));
+    const b = h('button', { class: 'pin' + (S.seen.places.includes(p.id) ? ' seen' : ''), style: { left: x / 10 + '%', top: y / 7 + '%' }, 'aria-label': p.name, onclick: () => { click(); show(p.id); } }, h('span', {}, h('i', {}, i + 1)));
     pins[p.id] = b; paper.append(b);
   });
-  MAPFOG.forEach(([x, y]) => paper.append(h('button', { class: 'pin fog', style: { left: x / 10 + '%', top: y / 7 + '%' }, 'aria-label': '?', onclick: () => { note(rnd(L.map.fog)); noiseBurst(.25, .03); } }, h('span'))));
+  MAPFOG.forEach(([x, y]) => paper.append(h('button', { class: 'pin fog', style: { left: x / 10 + '%', top: y / 7 + '%' }, 'aria-label': '?', onclick: () => { click(); note(rnd(L.map.fog)); noiseBurst(.25, .03); } }, h('span'))));
   function show(id) {
     const p = L.map.places.find(q => q.id === id); if (!p) return;
     Object.values(pins).forEach(b => b.removeAttribute('aria-current')); pins[id].setAttribute('aria-current', 'true'); pins[id].classList.add('seen');
@@ -525,7 +525,8 @@ BUILD.case = (body, opts) => {
   const card = () => h('button', { class: 'bizcard', onclick: () => { note(L.case.card); ach('card'); click(); } }, h('b', {}, 'NATHAN HUGHES'), h('i', {}, 'Attorney at Law'), h('small', {}, 'Seattle, WA · 555-0131'));
   function lockedTry() {
     S.classified = (S.classified || 0) + 1; save();
-    note(L.case.lockedTries[Math.min(S.classified - 1, L.case.lockedTries.length - 1)]);
+    sess.cl = (sess.cl || 0) + 1;
+    note(L.case.lockedTries[(sess.cl - 1) % L.case.lockedTries.length]);
     noiseBurst(.2, .04);
     if (S.classified >= 5) ach('classified');
   }
@@ -656,29 +657,30 @@ async function startCall(who, incoming) {
   }
   PH.state = 'connected'; PH.who = who; renderLCD(); renderCtr();
   const C = L.phone.calls, name = L.phone.names[who];
-  let lines, key = null, glitch = false;
-  if (incoming) { lines = C.incoming[who]; key = { tyler: 'incoming_tyler', diner: 'incoming_diner', mom: 'incoming_mom' }[who] || null; if (who === 'creepy') setTimeout(() => { if (tok === PH.tok) snd('whisper2', 0.75); }, 1300); }
-  else if (who === 'wrong') { lines = C.wrong; key = 'clip_wrong_operator'; }
-  else if (who === 'lady') { lines = C.lady; key = 'clip_wrong_neighbor'; }
-  else if (who === 'creepy') { lines = C.creepy; key = 'call_voice_0117'; }
+  let get = null, key = null, glitch = false;
+  if (incoming) { get = X => X.incoming[who]; key = { tyler: 'incoming_tyler', diner: 'incoming_diner', mom: 'incoming_mom' }[who] || null; if (who === 'creepy') setTimeout(() => { if (tok === PH.tok) snd('whisper2', 0.75); }, 1300); }
+  else if (who === 'wrong') { get = X => X.wrong; key = 'clip_wrong_operator'; }
+  else if (who === 'lady') { get = X => X.lady; key = 'clip_wrong_neighbor'; }
+  else if (who === 'creepy') { get = X => X.creepy; key = 'call_voice_0117'; }
   else {
     const c = C[who], n = S.calls[who] || 0, vm = VO_MAP[who] || {};
     S.calls[who] = n + 1;
     if (!S.reached.includes(who)) S.reached.push(who);
     save();
-    if (new Date().getHours() < 6 && c.night && !PH.nightUsed[who]) { lines = c.night; key = vm.night; PH.nightUsed[who] = 1; }
-    else if (who === 'nate' && n >= 3) { lines = c.after; key = 'clip_nate_voicemail'; }
-    else if (n < c.seq.length) { lines = c.seq[n]; key = vm.seq && vm.seq[n]; }
-    else if (c.pool) { const j = Math.floor(Math.random() * c.pool.length); lines = c.pool[j]; key = vm.pool && vm.pool[j]; }
-    else { const j = Math.floor(Math.random() * c.seq.length); lines = c.seq[j]; key = vm.seq && vm.seq[j]; }
+    if (new Date().getHours() < 6 && c.night && !PH.nightUsed[who]) { get = X => X[who].night; key = vm.night; PH.nightUsed[who] = 1; }
+    else if (who === 'nate' && n >= 3) { get = X => X[who].after; key = 'clip_nate_voicemail'; }
+    else if (n < c.seq.length) { get = X => X[who].seq[n]; key = vm.seq && vm.seq[n]; }
+    else if (c.pool) { const j = Math.floor(Math.random() * c.pool.length); get = X => X[who].pool[j]; key = vm.pool && vm.pool[j]; }
+    else { const j = Math.floor(Math.random() * c.seq.length); get = X => X[who].seq[j]; key = vm.seq && vm.seq[j]; }
     if (['tyler', 'nate', 'mom', 'diner', 'e911', 'sheriff'].every(k => S.reached.includes(k))) ach('book');
     if (who === 'e911' && S.calls.e911 >= 3) ach('e911');
-    glitch = sess.obs && Math.random() < 0.3 && !lines.some(l => l.startsWith('{'));
   }
+  const lines = get(C), linesEn = get(TX.en.phone.calls) || lines;
+  if (!incoming && !['wrong', 'lady', 'creepy'].includes(who)) glitch = sess.obs && Math.random() < 0.3 && !lines.some(l => l.startsWith('{'));
   if (who === 'wrong' || who === 'lady') ach('wrong');
   if (who === 'creepy') ach('creepy');
   let done = null;
-  if (key && !S.muted && window.RS_VO && window.RS_VO[key]) done = await runVO(lines, who, name, tok, key, glitch);
+  if (key && !S.muted && window.RS_VO && window.RS_VO[key]) done = await runVO(lines, who, name, tok, key, glitch, linesEn);
   if (done === null && tok === PH.tok) done = await runLines(glitch ? [lines[0], ...C.glitch] : lines, who, name, tok);
   if (done && tok === PH.tok && PH.state !== 'idle') { await sleep(600); if (tok === PH.tok) hang(); }
 }
@@ -704,10 +706,19 @@ function voGroups(key, n, lens) {
   const v = window.RS_VO && window.RS_VO[key]; if (!v || !n) return null;
   const sp = v.s.length ? v.s : [[0, v.d]];
   const starts = [], ends = [];
-  if (sp.length >= n) {
-    const gaps = []; for (let i = 0; i < sp.length - 1; i++) gaps.push([sp[i + 1][0] - sp[i][1], i]);
-    const cuts = gaps.sort((a, b) => b[0] - a[0]).slice(0, n - 1).map(g => g[1]).sort((a, b) => a - b);
-    starts.push(sp[0][0]); cuts.forEach(i => { ends.push(sp[i][1]); starts.push(sp[i + 1][0]); }); ends.push(sp[sp.length - 1][1]);
+  if (sp.length === n) {
+    sp.forEach(([a, b]) => { starts.push(a); ends.push(b); });
+  } else if (sp.length > n) {
+    // map each line's share of the text onto speaking time (silences skipped), then snap to the nearest phrase start
+    const total = sp.reduce((t, [a, b]) => t + (b - a), 0), chars = lens.reduce((x, y) => x + y, 0) || 1;
+    const at = f => { let left = f * total; for (const [a, b] of sp) { if (left <= b - a) return a + left; left -= b - a; } return sp[sp.length - 1][1]; };
+    let acc = 0;
+    lens.forEach((l, i) => {
+      let t = at(acc / chars);
+      if (i > 0) { const near = sp.map(x => x[0]).filter(x => x > starts[i - 1] + 0.2).sort((x, y) => Math.abs(x - t) - Math.abs(y - t))[0]; if (near != null && Math.abs(near - t) < 2.2) t = near; }
+      starts.push(t); acc += l;
+    });
+    for (let i = 0; i < n; i++) ends.push(i < n - 1 ? starts[i + 1] : sp[sp.length - 1][1]);
   } else {
     const a = sp[0][0], b = sp[sp.length - 1][1], tot = lens.reduce((x, y) => x + y, 0) || 1; let t = a;
     lens.forEach(l => { starts.push(t); t += (b - a) * l / tot; ends.push(t); });
@@ -718,7 +729,7 @@ function audioUntil(a, t, tok, maxS) {
   const t0 = performance.now();
   return new Promise(res => { const f = () => { if (tok !== PH.tok || !a || a._failed || a.ended || a.currentTime >= t || performance.now() - t0 > maxS * 1000) return res(); requestAnimationFrame(f); }; f(); });
 }
-async function runVO(lines, who, name, tok, key, glitch) {
+async function runVO(lines, who, name, tok, key, glitch, linesEn) {
   const C = L.phone.calls;
   let i0 = 0;
   while (i0 < lines.length && lines[i0].startsWith('{note}')) { const s = subLine(null, '', 'stage-dir'); if (s) s.textContent = lines[i0].slice(6); i0++; await sleep(1200); if (tok !== PH.tok) return false; }
@@ -734,7 +745,14 @@ async function runVO(lines, who, name, tok, key, glitch) {
       spoken.push({ sp, t, vm });
     }
   }
-  const g = voGroups(key, spoken.length, spoken.map(x => x.t.length)); if (!g) return null;
+  const enLens = [];
+  for (const l of (linesEn || lines).slice(i0)) {
+    if (l === '{mono}') TX.en.phone.calls.mom.mono.forEach(m => enLens.push(m.length));
+    else if (l === '{hang}' || l === '{hold}' || l.startsWith('{note}')) continue;
+    else enLens.push(l.replace(/^\{[a-z]+(:\w+)?\}/, '').length);
+  }
+  const lens = enLens.length === spoken.length ? enLens : spoken.map(x => x.t.length);
+  const g = voGroups(key, spoken.length, lens); if (!g) return null;
   const a = playVO(key); if (!a) return null;
   const t0 = performance.now();
   const n = glitch ? 1 : spoken.length;
@@ -998,7 +1016,7 @@ function winMusic() {
   const frameBox = h('div', { class: 'mframe' }), tabs = h('div', { class: 'mtabs' });
   const show = t => {
     tab = t; $$('button', tabs).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.t === t)));
-    frameBox.innerHTML = '';
+    frameBox.innerHTML = ''; frameBox.classList.toggle('ya', t === 'ya');
     frameBox.append(h('iframe', { src: t === 'ya' ? D.links.yandexEmbed : D.links.spotifyEmbed, title: t === 'ya' ? P.ya : P.sp, allow: 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture', loading: 'lazy' }));
   };
   ['ya', 'sp'].forEach(t => tabs.append(h('button', { class: 'w98btn', 'data-t': t, onclick: () => { click(); show(t); } }, t === 'ya' ? P.ya : P.sp)));
