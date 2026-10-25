@@ -417,6 +417,7 @@ ru: {
     sum: "Сумма", note: "Комментарий офицера", notePh: "Необязательно",
     make: "Выписать", again: "Ещё один", save: "Скачать", share: "Поделиться", saved: "Готово", shareFail: "Сохрани картинку и отправь вручную.",
     longpress: "Не скачивается? Нажми на картинку и удерживай, чтобы сохранить.",
+    longpressIOS: "«Сохранить» откроет меню iPhone: выбери «Сохранить изображение», и штраф попадёт в Фото. Или нажми на картинку и удерживай.",
     violations: [
       "Паркуется как Тайлер Пирс", "Слишком громко смеётся в общественном месте", "Не отвечает на сообщения дольше трёх дней",
       "Ест чужую еду из общего холодильника", "Спойлеры без предупреждения", "Не позвонил(а) маме",
@@ -870,6 +871,7 @@ en: {
     sum: "Fine", note: "Officer's comment", notePh: "Optional",
     make: "Issue ticket", again: "Another one", save: "Download", share: "Share", saved: "Done", shareFail: "Save the image and send it yourself.",
     longpress: "Not downloading? Press and hold the image to save it.",
+    longpressIOS: "On iPhone, Download opens the share menu: pick “Save Image” to put it in Photos. Or press and hold the picture.",
     violations: [
       "Parks like Tyler Pierce", "Laughing too loudly in a public place", "Not answering texts for more than three days",
       "Eating other people's food from the shared fridge", "Spoilers without warning", "Didn't call their mom",

@@ -933,7 +933,7 @@ function openWin(title, content, small) {
   const os = cur && cur.os; if (!os) return null;
   $$('.win', os).forEach(w => w.remove());
   const w = h('div', { class: 'win' + (small ? ' small' : ''), role: 'dialog', 'aria-label': title },
-    h('div', { class: 'bar' }, h('span', {}, title), h('button', { class: 'wx', 'aria-label': L.ui.close, onclick: () => { click(); w.remove(); } }, '×')),
+    h('div', { class: 'bar' }, h('span', {}, title), h('button', { class: 'wx', 'aria-label': L.ui.close, onclick: () => { click(); w.remove(); }, html: '<svg viewBox="0 0 10 10" width="9" height="9"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="#000" stroke-width="1.8"/></svg>' })),
     h('div', { class: 'content' }, content));
   os.append(w); return w;
 }
@@ -982,7 +982,7 @@ function winForum(threadId) {
     const tb = h('table', { class: 'f-list' }, h('thead', {}, h('tr', {}, h('th', {}, F.cols[0]), h('th', { style: { textAlign: 'center' } }, F.cols[1]), h('th', { class: 'v', style: { textAlign: 'center' } }, F.cols[2]))));
     const tbody = h('tbody');
     [...F.threads].sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0)).forEach(t => tbody.append(h('tr', {},
-      h('td', {}, t.pin ? h('span', { class: 'pin' }, lang === 'ru' ? 'Важно:' : 'Pinned:') : null, h('button', { class: S.seen.threads.includes(t.id) ? 'read' : '', onclick: () => { click(); thread(t.id); } }, t.t), h('span', { class: 'brd' }, F.boards[t.b])),
+      h('td', {}, t.pin ? h('span', { class: 'f-pin' }, lang === 'ru' ? 'Важно:' : 'Pinned:') : null, h('button', { class: S.seen.threads.includes(t.id) ? 'read' : '', onclick: () => { click(); thread(t.id); } }, t.t), h('span', { class: 'brd' }, F.boards[t.b])),
       h('td', { class: 'n' }, t.posts.length - 1), h('td', { class: 'n v' }, t.views.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US')))));
     tb.append(tbody); root.append(tb); content.scrollTop = 0;
   }
@@ -1153,10 +1153,25 @@ async function certDownload() {
   x.font = '54px "Marck Script", cursive'; x.fillText('D. Marshall', W2 / 2, 1010); x.font = '20px "PT Mono", monospace'; x.fillStyle = '#6a5a48'; x.fillText(g.certSign, W2 / 2, 1050);
   stampAt(x, W2 / 2 + 250, 920, L.fine.doc.stamp, -0.25, 50);
   footer(x, W2, H2, L.fine.doc.foot);
-  saveCanvas(c, 'riddleside-certificate.png');
+  saveCanvas(c, 'riddleside-certificate.jpg');
 }
-function saveCanvas(c, name) {
-  try { const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = name; document.body.append(a); a.click(); a.remove(); } catch (e) { note(L.fine.shareFail); }
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function canvasFile(c, name) {
+  const url = c.toDataURL('image/jpeg', 0.92); const bin = atob(url.split(',')[1]); const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return { url, file: new File([arr], name, { type: 'image/jpeg' }) };
+}
+async function shareFile(file) {
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }); return true; }
+  } catch (err) { if (err && err.name === 'AbortError') return true; }
+  return false;
+}
+async function saveCanvas(c, name, pre) {
+  const { url, file } = pre || canvasFile(c, name);
+  // iPhone: the share sheet has "Save Image", which puts it in Photos
+  if (isIOS && await shareFile(file)) return;
+  try { const a = document.createElement('a'); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); } catch (e) { note(L.fine.shareFail); }
 }
 function winFine() {
   const F = L.fine;
@@ -1170,14 +1185,14 @@ function winFine() {
   const form = h('form', { onsubmit: async e => {
     e.preventDefault(); snd('typing', 0.35); setTimeout(() => stopSnd('typing'), 1100);
     const data = { to: to.value.trim() || F.toEx, what: what.value === '__own' ? (own.value.trim() || F.violations[0]) : what.value, sum: sum.value, note: nt.value.trim() };
-    const c = await renderFine(data); const url = c.toDataURL('image/png');
+    const c = await renderFine(data); const pre = canvasFile(c, 'riddleside-fine.jpg'), url = pre.url;
     out.innerHTML = '';
     const im = h('img', { src: url, alt: F.title });
     const btns = h('div', { class: 'btns' },
-      h('button', { class: 'w98btn', type: 'button', onclick: () => saveCanvas(c, 'riddleside-fine.png') }, F.save),
-      navigator.share ? h('button', { class: 'w98btn', type: 'button', onclick: () => c.toBlob(async b => { try { const f = new File([b], 'riddleside-fine.png', { type: 'image/png' }); if (navigator.canShare && navigator.canShare({ files: [f] })) await navigator.share({ files: [f], title: L.ui.title }); else note(F.shareFail); } catch (err) { if (err && err.name !== 'AbortError') note(F.shareFail); } }) }, F.share) : null,
+      h('button', { class: 'w98btn', type: 'button', onclick: () => saveCanvas(c, 'riddleside-fine.jpg', pre) }, F.save),
+      navigator.share ? h('button', { class: 'w98btn', type: 'button', onclick: async () => { if (!await shareFile(pre.file)) note(F.shareFail); } }, F.share) : null,
       h('button', { class: 'w98btn', type: 'button', onclick: () => { out.innerHTML = ''; out.append(h('div', { class: 'ph' }, F.sub)); to.select(); } }, F.again));
-    out.append(im, btns, h('div', { class: 'lp' }, F.longpress));
+    out.append(im, btns, h('div', { class: 'lp' }, isIOS ? F.longpressIOS : F.longpress));
     ach('fine');
   } },
   h('label', { for: 'fto' }, F.to, to), h('label', { for: 'fwhat' }, F.what, what), own, h('label', { for: 'fsum' }, F.sum, sum), h('label', { for: 'fnote' }, F.note, nt),
