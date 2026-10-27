@@ -663,17 +663,23 @@ async function startCall(who, incoming) {
   else if (who === 'lady') { get = X => X.lady; key = 'clip_wrong_neighbor'; }
   else if (who === 'creepy') { get = X => X.creepy; key = 'call_voice_0117'; }
   else {
-    const c = C[who], n = S.calls[who] || 0, vm = VO_MAP[who] || {};
-    S.calls[who] = n + 1;
+    const c = C[who], vm = VO_MAP[who] || {}, now = Date.now();
+    S.callT = S.callT || {}; S.callTot = S.callTot || {}; S.lastPool = S.lastPool || {};
+    // the scripted calls start over after 2 hours away, and also after every full cycle
+    if (!S.callT[who] || now - S.callT[who] > 2 * 3600e3) S.calls[who] = 0;
+    S.callT[who] = now;
+    const cyc = c.seq.length + (c.pool || who === 'nate' ? 5 : 0);
+    const n = (S.calls[who] || 0) % cyc;
+    S.calls[who] = (S.calls[who] || 0) + 1; S.callTot[who] = (S.callTot[who] || 0) + 1;
     if (!S.reached.includes(who)) S.reached.push(who);
     save();
     if (new Date().getHours() < 6 && c.night && !PH.nightUsed[who]) { get = X => X[who].night; key = vm.night; PH.nightUsed[who] = 1; }
     else if (who === 'nate' && n >= 3) { get = X => X[who].after; key = 'clip_nate_voicemail'; }
     else if (n < c.seq.length) { get = X => X[who].seq[n]; key = vm.seq && vm.seq[n]; }
-    else if (c.pool) { const j = Math.floor(Math.random() * c.pool.length); get = X => X[who].pool[j]; key = vm.pool && vm.pool[j]; }
+    else if (c.pool) { let j = Math.floor(Math.random() * c.pool.length); if (c.pool.length > 1 && j === S.lastPool[who]) j = (j + 1) % c.pool.length; S.lastPool[who] = j; save(); get = X => X[who].pool[j]; key = vm.pool && vm.pool[j]; }
     else { const j = Math.floor(Math.random() * c.seq.length); get = X => X[who].seq[j]; key = vm.seq && vm.seq[j]; }
     if (['tyler', 'nate', 'mom', 'diner', 'e911', 'sheriff'].every(k => S.reached.includes(k))) ach('book');
-    if (who === 'e911' && S.calls.e911 >= 3) ach('e911');
+    if (who === 'e911' && S.callTot.e911 >= 3) ach('e911');
   }
   const lines = get(C), linesEn = get(TX.en.phone.calls) || lines;
   if (!incoming && !['wrong', 'lady', 'creepy'].includes(who)) glitch = sess.obs && Math.random() < 0.3 && !lines.some(l => l.startsWith('{'));
