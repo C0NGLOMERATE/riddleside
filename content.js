@@ -14,7 +14,7 @@ window.RS_DATA = {
     site: "c0nglomerate.github.io/riddleside"
   },
   /* День релиза в октябре 2026 (число), чтобы обвести его на календаре. null = не обводить */
-  releaseDay: 27,
+  releaseDay: 28,
   numbers: { tyler: "0142", mom: "0163", diner: "0188", nate: "0131", creepy: "0117", sheriff: "101", e911: "911" }
 };
 
